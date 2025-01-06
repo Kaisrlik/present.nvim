@@ -59,6 +59,21 @@ describe("present.parse_slides", function()
     }, slide.blocks[1])
   end)
 
+  it("should parse a file and ignore commected lines", function()
+    local results = parse {
+      "# This is the first slide",
+      "This is the body",
+      "-- Should be ignored",
+    }
+
+    -- Should only have one slide
+    eq(1, #results.slides)
+
+    local slide = results.slides[1]
+    eq('# This is the first slide', slide.title)
+    eq({ "This is the body" }, slide.body)
+  end)
+
   it('should not treat # inside code blocks as new slides', function()
     local results = parse {
       '# Main slide',

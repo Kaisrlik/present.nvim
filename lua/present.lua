@@ -115,6 +115,8 @@ local parse_slides = function(lines)
     blocks = {},
   }
 
+  -- Consider to swtich to more compatible options like "[comment]: #"
+  local comment = "--"
   local separator = "^#"
   local inside_code_block = false
 
@@ -136,7 +138,10 @@ local parse_slides = function(lines)
         blocks = {}
       }
     else
-      table.insert(current_slide.body, line)
+    -- ignore commented lines
+    if not vim.startswith(line, comment) then
+        table.insert(current_slide.body, line)
+      end
     end
   end
 
